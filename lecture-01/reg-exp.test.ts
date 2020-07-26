@@ -1,5 +1,5 @@
 import { assertEquals, assertArrayContains } from 'https://deno.land/std/testing/asserts.ts';
-import isValidCSS from './css-on-reg-exp.ts';
+import isValidCSS from './css-on-reg-exp.js';
 
 // Simple name and function, compact form, but not configurable
 Deno.test(`is css`, () => {

@@ -1,9 +1,7 @@
 import { str, regexp, sequenceOf, choice, many, run } from './parser-combinator.js'
 
-const selector = regexp(/\w+/)
-const spaceOrNewLine = regexp(/[\n\s]*/)
-const openBracket = str('{')
-const closeBracket = str('}')
+const __ = regexp(/[\n\s]*/)
+const selector = sequenceOf(__, regexp(/\w+/))
 const rule = sequenceOf(
   regexp(/\w+/),
   regexp(/\s*/),
@@ -12,28 +10,22 @@ const rule = sequenceOf(
   regexp(/\w+/),
   regexp(/\s*/),
   str(';'),
-  spaceOrNewLine,
+  __,
 )
+const rules = sequenceOf(__, str('{'), __, choice(many(rule), __), str('}'))
 
-const cssExpression = sequenceOf(
-  selector,
-  spaceOrNewLine,
-  openBracket,
-  spaceOrNewLine,
-  choice(many(rule), spaceOrNewLine),
-  spaceOrNewLine,
-  closeBracket,
-  spaceOrNewLine,
-)
+const selectors = choice(sequenceOf(many(sequenceOf(selector, str(','))), selector), selector)
+
+const cssExpression = sequenceOf(selectors, __, rules, __)
 
 const isValidCSS = (cssString) => {
-  const result = run(choice(many(cssExpression), spaceOrNewLine))(cssString)
+  const result = run(choice(many(cssExpression), __))(cssString)
 
   return result.index === cssString.length && !result[1]
 }
 
-// isValidCSS(`div { color:red;\n border:none; }`) /*?*/;
-isValidCSS(`\n   \n`) /*?*/
+isValidCSS(`div, span {}`) /*?*/
+isValidCSS(`div, span, article {}`) /*?*/
 
 const test = () => {
   // is css
@@ -46,6 +38,7 @@ const test = () => {
   isValidCSS(`div { color:red; }`) /*?*/
   isValidCSS(`div { color:red;\n border:none; }`) /*?*/
   isValidCSS(`div { color:red;\n border:none; } span {background: red;}`) /*?*/
+  isValidCSS(`div, span { color:red;\n border:none; } span {background: red;}`) /*?*/
 
   //isn't css
   isValidCSS(`{}`) /*?*/

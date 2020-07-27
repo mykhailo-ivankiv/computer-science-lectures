@@ -22,8 +22,7 @@ export const regexp = (regexp) => {
   }
 }
 
-export const sequenceOf = (...fns) => (a) => fns.reduce((acc, fn) => fn(acc), a)
-export const run = (...fns) => (src) => sequenceOf(...fns)({ src, isError: false, index: 0 })
+export const sequenceOf = (...parsers) => (state) => parsers.reduce((acc, fn) => fn(acc), state)
 
 export const choice = (...fns) => (state) => {
   if (state.isError) return state
@@ -37,17 +36,19 @@ export const choice = (...fns) => (state) => {
   return result
 }
 
-export const many = (fn) => (state) => {
+export const many = (parser) => (state) => {
   if (state.isError) return state
 
-  let result = fn(state)
-  let prevResult = fn(state)
+  let result = parser(state)
+  let prevResult = parser(state)
 
   while (!result.isError) {
-    result = fn(result)
+    result = parser(result)
     if (result.isError) return prevResult
     prevResult = result
   }
 
   return prevResult
 }
+
+export const run = (...parsers) => (src) => sequenceOf(...parsers)({ src, isError: false, index: 0 })

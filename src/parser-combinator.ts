@@ -7,6 +7,7 @@ type ParserState = {
 }
 type Parser = (state: ParserState) => ParserState
 
+// Basic parsers
 export const str = (str: string): Parser => (state) => {
   if (state.isError) return state
 

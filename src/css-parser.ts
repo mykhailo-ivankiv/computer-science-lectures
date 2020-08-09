@@ -1,4 +1,4 @@
-import { str, regexp, sequenceOf, choice, many, run } from './parser-combinator.ts'
+import { str, regexp, sequenceOf, choice, many, run, oneOrMany } from './parser-combinator.ts'
 
 const __ = regexp(/[\n\s]*/)
 const selector = sequenceOf(__, regexp(/\w+/))
@@ -17,13 +17,12 @@ const selectors = choice(sequenceOf(many(sequenceOf(selector, str(','))), select
 const cssExpression = sequenceOf(selectors, __, rules, __)
 
 const isValidCSS = (cssString: string) => {
-  const result = run(choice(many(cssExpression), __))(cssString)
+  const result = run(choice(oneOrMany(cssExpression), __))(cssString)
 
   return result.index === cssString.length && !result[1]
 }
 
-isValidCSS(`div, span {}`) /*?*/
-isValidCSS(`div, span, article {}`) /*?*/
+isValidCSS(`\n   \n`) /*?*/
 
 const test = () => {
   // is css

@@ -17,7 +17,7 @@ type ReduceWhile = <El = any, Acc = any>(predicate: (acc:Acc, el: El) => boolean
 export const reduceWhile: ReduceWhile = (predicate, fn, acc, arr) =>
   isEmpty(arr) ? acc : !predicate(acc, head(arr)) ? acc : reduceWhile(predicate, fn, fn(acc, head(arr)), tail(arr))
 
-type Find = <El = any>(fn: (el: El) => boolean, arr: any[]) => boolean
+type Find = <El = any>(fn: (el: El) => boolean, arr: any[]) => El | undefined
 export const find: Find = (predicate, arr) => {
   const result = reduceWhile(not(predicate), (acc, el) => el, head(arr), tail(arr))
 

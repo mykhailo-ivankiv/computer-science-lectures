@@ -1,10 +1,6 @@
 import { reduce, find } from './utils.ts'
 
-type ParserState = {
-  src: string
-  index: number
-  isError: boolean
-}
+type ParserState = { src: string; index: number; isError: boolean }
 type Parser = (state: ParserState) => ParserState
 
 // Basic parsers
@@ -37,7 +33,7 @@ export const sequenceOf = (...parsers: Parser[]): Parser => (state) =>
   reduce<Parser, ParserState>((acc, fn) => fn(acc), state, parsers)
 
 export const choice = (...parsers: Parser[]): Parser => (state) => {
-  const parser = find((parser) => parser(state).isError === false, parsers)
+  const parser = find<Parser>((parser) => parser(state).isError === false, parsers)
 
   return parser === undefined ? { ...state, isError: true } : parser(state)
 }

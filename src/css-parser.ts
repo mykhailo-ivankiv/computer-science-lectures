@@ -16,29 +16,23 @@ const rules = sequenceOf(__, str('{'), __, choice(many(rule), __), str('}'))
 const selectors = choice(sequenceOf(many(sequenceOf(selector, str(','))), selector), selector)
 const cssExpression = sequenceOf(selectors, __, rules, __)
 
-const isValidCSS = (cssString: string) => {
-  const result = run(choice(oneOrMany(cssExpression), __))(cssString)
-
-  return result.index === cssString.length && !result[1]
-}
-
-isValidCSS(`\n   \n`) /*?*/
+const parseCss = (cssString: string) => run(choice(oneOrMany(cssExpression), __))(cssString)
 
 const test = () => {
   // is css
-  isValidCSS(``) /*?*/
-  isValidCSS(`\n   \n`) /*?*/
-  isValidCSS(`div{}`) /*?*/
-  isValidCSS(`div {}`) /*?*/
-  isValidCSS(`div\n{\n}\n`) /*?*/
-  isValidCSS(`div { color:red; }`) /*?*/
-  isValidCSS(`div { }\ndiv { }\nspan{}`) /*?*/
-  isValidCSS(`div { color:red;\n border:none; }`) /*?*/
-  isValidCSS(`div { color:red;\n border:none; } span {background: red;}`) /*?*/
-  isValidCSS(`div, span { color:red;\n border:none; } span {background: red;}`) /*?*/
+  parseCss(``) /*?*/
+  parseCss(`\n   \n`) /*?*/
+  parseCss(`div{}`) /*?*/
+  parseCss(`div {}`) /*?*/
+  parseCss(`div\n{\n}\n`) /*?*/
+  parseCss(`div { color:red; }`) /*?*/
+  parseCss(`div { }\ndiv { }\nspan{}`) /*?*/
+  parseCss(`div { color:red;\n border:none; }`) /*?*/
+  parseCss(`div { color:red;\n border:none; } span {background: red;}`) /*?*/
+  parseCss(`div, span { color:red;\n border:none; } span {background: red;}`) /*?*/
 
   //isn't css
-  isValidCSS(`{}`) /*?*/
+  parseCss(`{}`) /*?*/
 }
 
 test()

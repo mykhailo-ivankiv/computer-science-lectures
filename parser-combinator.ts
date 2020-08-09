@@ -1,4 +1,11 @@
-export const str = (str) => (state) => {
+type ParserState = {
+  src: string
+  index: number
+  isError: boolean
+}
+type Parser = (state: ParserState) => ParserState
+
+export const str = (str: string): Parser => (state) => {
   if (state.isError) return state
 
   const { index, src } = state
@@ -8,7 +15,7 @@ export const str = (str) => (state) => {
     : { ...state, isError: true } //
 }
 
-export const regexp = (regexp) => {
+export const regexp = (regexp: RegExp): Parser => {
   regexp = new RegExp(`^(${regexp.source})`, 'g')
 
   return (state) => {
@@ -22,10 +29,12 @@ export const regexp = (regexp) => {
   }
 }
 
-export const sequenceOf = (...parsers) => (state) => parsers.reduce((acc, fn) => fn(acc), state)
+// Combinations
+export const sequenceOf = (...parsers: Parser[]): Parser => (state) => parsers.reduce((acc, fn) => fn(acc), state)
 
-export const choice = (...fns) => (state) => {
+export const choice = (...fns: Parser[]): Parser => (state) => {
   if (state.isError) return state
+  if (fns.length === 0) return state
 
   let result
   for (const fn of fns) {
@@ -36,7 +45,7 @@ export const choice = (...fns) => (state) => {
   return result
 }
 
-export const many = (parser) => (state) => {
+export const many = (parser: Parser): Parser => (state) => {
   if (state.isError) return state
 
   let result = parser(state)

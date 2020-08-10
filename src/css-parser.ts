@@ -1,22 +1,23 @@
-import { str, regexp, sequenceOf, choice, many, run, oneOrMany } from './parser-combinator.ts'
+import { str, regexp, sequenceOf, choice, many, oneOrMany, eof } from './parser-combinator.ts'
 
+const _ = (s) => str(s)
 const __ = regexp(/[\n\s]*/)
-const selector = sequenceOf(__, regexp(/\w+/))
-const rule = sequenceOf(
-  regexp(/\w+/),
-  regexp(/\s*/),
-  str(':'),
-  regexp(/\s*/),
-  regexp(/\w+/),
-  regexp(/\s*/),
-  str(';'),
-  __,
-)
-const rules = sequenceOf(__, str('{'), __, choice(many(rule), __), str('}'))
-const selectors = choice(sequenceOf(many(sequenceOf(selector, str(','))), selector), selector)
-const cssExpression = sequenceOf(selectors, __, rules, __)
 
-const parseCss = (cssString: string) => run(choice(oneOrMany(cssExpression), __))(cssString)
+const space = regexp(/\s*/)
+const word = regexp(/\w+/)
+const _word_ = sequenceOf(space, word, space).map((res) => res[1])
+
+const selector = _word_
+const propName = _word_
+const propValue = _word_
+
+const rule = sequenceOf(propName, _`:`, propValue, _`;`, __).map(([key, _s, value]) => ({ key, value }))
+
+const rules = sequenceOf(__, _`{`, __, choice(many(rule), __), _`}`)
+const selectors = choice(sequenceOf(many(sequenceOf(selector, _`,`)), selector), selector)
+const cssExpression = sequenceOf(selectors, __, rules, __).map(([selectors, _a, rules]) => ({ selectors, rules }))
+
+const parseCss = (cssString: string) => sequenceOf(choice(oneOrMany(cssExpression), __), eof).run(cssString)
 
 const test = () => {
   // is css

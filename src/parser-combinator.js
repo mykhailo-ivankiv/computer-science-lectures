@@ -1,18 +1,15 @@
-import { find, reduceWhile } from './utils.ts'
+import { find, reduceWhile } from './utils.js'
 
-type ParserState = { src: string; index: number; result: any; isError: boolean; error: any }
-type StateTransform = (state: ParserState) => ParserState
-
-const init = (src: string): ParserState => ({ src, index: 0, result: null, isError: false, error: null })
-const update = (index: number, result: any, state: ParserState): ParserState => ({ ...state, index, result })
-const updateResult = (result: any, state: ParserState): ParserState => ({ ...state, result })
-const setError = (error: any, state: ParserState): ParserState => ({ ...state, isError: true, error })
+const init = (src) => ({ src, index: 0, result: null, isError: false, error: null })
+const update = (index, result, state) => ({ ...state, index, result })
+const updateResult = (result, state) => ({ ...state, result })
+const setError = (error, state) => ({ ...state, isError: true, error })
 
 // Combinations
-export const sequenceOf = (...parsers: Parser[]): Parser =>
+export const sequenceOf = (...parsers) =>
   new Parser((state) => {
-    const result: any[] = []
-    const nextState = reduceWhile<Parser, ParserState>(
+    const result = []
+    const nextState = reduceWhile(
       (state) => !state.isError,
       (state, parser) => {
         const nextState = parser.stateTransformFunction(state)
@@ -26,17 +23,17 @@ export const sequenceOf = (...parsers: Parser[]): Parser =>
     return updateResult(result, nextState)
   })
 
-export const choice = (...parsers: Parser[]): Parser =>
+export const choice = (...parsers) =>
   new Parser((state) => {
-    const parser = find<Parser>((parser) => parser.stateTransformFunction(state).isError === false, parsers)
+    const parser = find < Parser > ((parser) => parser.stateTransformFunction(state).isError === false, parsers)
 
     return parser === undefined
       ? setError(`Unable to match any parser on index ${state.index}`, state)
       : parser.stateTransformFunction(state)
   })
 
-export const many = (parser: Parser): Parser => {
-  const repeater = (state: ParserState, result: any[]): [ParserState, any[]] => {
+export const many = (parser) => {
+  const repeater = (state, result) => {
     let nextState = parser.stateTransformFunction(state)
 
     return nextState.isError ? [state, result] : repeater(nextState, [...result, nextState.result])
@@ -48,24 +45,22 @@ export const many = (parser: Parser): Parser => {
   })
 }
 
-export const oneOrMany = (parser: Parser): Parser => sequenceOf(parser, many(parser))
+export const oneOrMany = (parser) => sequenceOf(parser, many(parser))
 
 class Parser {
-  public stateTransformFunction: StateTransform
-
-  constructor(stateTransformFunction: StateTransform) {
+  constructor(stateTransformFunction) {
     this.stateTransformFunction = stateTransformFunction
   }
 
-  run = (src: string): ParserState => this.stateTransformFunction(init(src))
-  map = (fn: Function) =>
+  run = (src) => this.stateTransformFunction(init(src))
+  map = (fn) =>
     new Parser((state) => {
       const nextState = this.stateTransformFunction(state)
 
       return nextState.isError ? nextState : updateResult(fn(nextState.result), nextState)
     })
 
-  mapError = (fn: Function) =>
+  mapError = (fn) =>
     new Parser((state) => {
       const nextState = this.stateTransformFunction(state)
 
@@ -74,7 +69,7 @@ class Parser {
 }
 
 // Basic parsers
-export const str = (str: string): Parser =>
+export const str = (str) =>
   new Parser((state) => {
     if (state.isError) return state
 
@@ -93,7 +88,7 @@ export const eof = new Parser((state) => {
     : setError(`Expect end of file, but got ${state.src.slice(state.index)}`, state)
 })
 
-export const regexp = (regexp: RegExp): Parser => {
+export const regexp = (regexp) => {
   const regexpToMatch = new RegExp(`^(${regexp.source})`, 'g')
 
   return new Parser((state) => {

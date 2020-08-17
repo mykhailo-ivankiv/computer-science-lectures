@@ -1,4 +1,5 @@
-import { str, regexp, sequenceOf, choice, many, oneOrMany, eof } from './parser-combinator.js'
+// @ts-check
+import { str, regexp, eof, many, sequenceOf, choice, oneOrMany } from './parser-combinators/index.js'
 
 const _ = (s) => str(s)
 const __ = regexp(/[\n\s]*/)

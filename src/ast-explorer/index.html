@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0"
+    />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+    <title>AST explorer</title>
+    <link href="https://fonts.googleapis.com/css2?family=Fira+Code&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="../../styles/common.css" />
+    <link rel="stylesheet" href="./AST-explorer.css" />
+    <style></style>
+  </head>
+  <body>
+    <div class="AST-explorer">
+      <div class="AST-explorer__input-wrapper"><!--
+        --><textarea class="AST-explorer__input"></textarea><!--
+        --><div class="AST-explorer__input-highlighter"></div>
+      </div>
+      <div class="AST-explorer__result">
+        #main { border: 1px solid black; } ul li { padding: 5px; }
+      </div>
+    </div>
+  </body>
+  <script type="module">
+    const inputEl = document.querySelector('.AST-explorer__input')
+    const highlightEl = document.querySelector('.AST-explorer__input-highlighter')
+    const result = document.querySelector('.AST-explorer__result')
+
+    inputEl.addEventListener('input', (ev) => {
+      highlightEl.innerText = ev.target.value
+    })
+  </script>
+</html>

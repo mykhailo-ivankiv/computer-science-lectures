@@ -1,0 +1,51 @@
+.AST-explorer {
+  --padding-size: 1ch;
+
+  font-family: 'Fira Code', monospace;
+  height: 100vh;
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+}
+
+.AST-explorer__input-wrapper {
+  background: hsla(0, 52%, 96%, 0.4);
+  position: relative;
+  white-space: pre-line;
+}
+
+.AST-explorer__input {
+  z-index: 1;
+  color: transparent;
+  caret-color: black;
+  box-sizing: border-box;
+  font-family: inherit;
+  font-size: inherit;
+  border: none;
+  resize: none;
+
+  outline: none;
+  padding: var(--padding-size);
+  margin: 0;
+  white-space: inherit;
+  background: transparent;
+
+  position: absolute;
+  top: 0;
+  right: 0;
+  min-height: 100%;
+  width: 100%;
+}
+
+.AST-explorer__input-highlighter {
+  position: relative;
+  unicode-bidi: embed;
+  white-space: inherit;
+  width: 100%;
+  padding: var(--padding-size);
+  z-index: 0;
+  overflow: auto;
+}
+
+.AST-explorer__result {
+  padding: var(--padding-size);
+}

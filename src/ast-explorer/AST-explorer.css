@@ -5,12 +5,12 @@
   height: 100vh;
   display: grid;
   grid-template-columns: repeat(2, 1fr);
+  white-space: pre-wrap;
 }
 
 .AST-explorer__input-wrapper {
   background: hsla(0, 52%, 96%, 0.4);
   position: relative;
-  white-space: pre-line;
 }
 
 .AST-explorer__input {
@@ -48,4 +48,6 @@
 
 .AST-explorer__result {
   padding: var(--padding-size);
+  unicode-bidi: embed;
+  white-space: inherit;
 }

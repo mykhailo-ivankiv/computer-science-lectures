@@ -1,5 +1,5 @@
 // @ts-check
-import { find, mapAccum, unfold, last } from './utils.js'
+import { find, mapAccum, unfold, last } from '../utils.js'
 import Parser, { setError, updateResult } from './Parser.js'
 
 // Combinations
@@ -38,4 +38,4 @@ export const many = (parser) =>
     return updateResult(result, nextState)
   })
 
-export const oneOrMany = (parser) => sequenceOf(parser, many(parser))
+export const oneOrMany = (parser) => sequenceOf(parser, many(parser)).map((result) => result.flat())

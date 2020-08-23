@@ -1,5 +1,5 @@
 // @ts-check
-import Parser, { update, setError } from './Parser.js'
+import Parser, { update, setError, updateResult } from './Parser.js'
 
 export const str = (str) =>
   new Parser((state) => {
@@ -16,7 +16,7 @@ export const eof = new Parser((state) => {
   if (state.isError) return state
 
   return state.index === state.src.length
-    ? state
+    ? updateResult(null, state)
     : setError(`Expect end of file, but got ${state.src.slice(state.index)}`, state)
 })
 

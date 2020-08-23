@@ -15,7 +15,12 @@ const wrapBySpace = wrapBy(__)
 const wrapByCurlyBrackets = wrapBy(wrapBySpace(_`{`), wrapBySpace(_`}`))
 
 const word = regexp(/\w+/)
-const selector = wrapBySpace(word)
+
+const tabSelector = wrapBySpace(word)
+const classSelector = sequenceOf(_`.`, word).map((result) => result.join(''))
+const idSelector = sequenceOf(_`#`, word).map((result) => result.join(''))
+const selector = choice(tabSelector, classSelector, idSelector)
+
 const propName = wrapBySpace(word)
 const propValue = wrapBySpace(word)
 const separatedByComma = separatedBy(wrapBySpace(_`,`))

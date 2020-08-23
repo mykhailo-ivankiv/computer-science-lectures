@@ -39,3 +39,11 @@ export const many = (parser) =>
   })
 
 export const oneOrMany = (parser) => sequenceOf(parser, many(parser)).map((result) => result.flat())
+
+export const wrapBy = (...wrappers) => (parser) => {
+  const [startWrapperParser, endWrapperParser = wrappers[0]] = wrappers
+  return sequenceOf(startWrapperParser, parser, endWrapperParser).map((result) => result[1])
+}
+
+export const separatedBy = (separator) => (parser) =>
+  sequenceOf(many(sequenceOf(parser, separator).map((result) => result[0])), parser).map((result) => result.flat())

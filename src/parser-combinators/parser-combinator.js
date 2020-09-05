@@ -46,4 +46,4 @@ export const wrapBy = (...wrappers) => (parser) => {
 }
 
 export const separatedBy = (separator) => (parser) =>
-  sequenceOf(many(sequenceOf(parser, separator).map((result) => result[0])), parser).map((result) => result.flat())
+  sequenceOf(many(sequenceOf(parser, separator).map((result) => result[0])), parser.map(result => [result])).map((result) => result.flat())

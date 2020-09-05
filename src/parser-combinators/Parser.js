@@ -17,6 +17,17 @@ export default class Parser {
       return nextState.isError ? nextState : updateResult(fn(nextState.result), nextState)
     })
 
+  chain = (fn) =>
+    new Parser((state) => {
+      const nextState = this.stateTransformFunction(state)
+
+      if (nextState.isError) return nextState
+
+      const nextParser = fn(nextState.result)
+
+      return nextParser.stateTransformFunction(nextState)
+    })
+
   mapError = (fn) =>
     new Parser((state) => {
       const nextState = this.stateTransformFunction(state)

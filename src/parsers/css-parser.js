@@ -1,8 +1,9 @@
 // @ts-check
 import {
-  str,
+  str as _,
   regexp,
   eof,
+  index as _I_,
   many,
   sequenceOf,
   choice,
@@ -11,9 +12,7 @@ import {
   wrapBy,
 } from '../parser-combinators/index.js'
 
-const _ = str
 const __ = regexp(/[\n\s]*/).map(() => null)
-const _I_ = str('').map((_, index) => index)
 
 const wrapBySpace = wrapBy(__)
 const separatedByComma = separatedBy(wrapBySpace(_`,`))

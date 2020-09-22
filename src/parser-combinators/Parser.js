@@ -14,7 +14,7 @@ export default class Parser {
     new Parser((state) => {
       const nextState = this.stateTransformFunction(state)
 
-      return nextState.isError ? nextState : updateResult(fn(nextState.result, state.index), nextState)
+      return nextState.isError ? nextState : updateResult(fn(nextState.result), nextState)
     })
 
   chain = (fn) =>
@@ -23,7 +23,7 @@ export default class Parser {
 
       if (nextState.isError) return nextState
 
-      const nextParser = fn(nextState.result, state.index)
+      const nextParser = fn(nextState.result)
 
       return nextParser.stateTransformFunction(nextState)
     })

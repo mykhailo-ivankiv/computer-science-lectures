@@ -12,14 +12,6 @@ export const str = (str) =>
       : setError(`Trying to match "${str}" here, but got: "${src.slice(index)}"`, state)
   })
 
-export const eof = new Parser((state) => {
-  if (state.isError) return state
-
-  return state.index === state.src.length
-    ? updateResult(null, state)
-    : setError(`Expect end of file, but got ${state.src.slice(state.index)}`, state)
-})
-
 export const regexp = (regexp) => {
   const regexpToMatch = new RegExp(`^(${regexp.source})`, 'g')
 
@@ -35,3 +27,17 @@ export const regexp = (regexp) => {
       : setError(`Regexp ${regexp.toString()} does not match string: "${src.slice(index)}"`, state)
   })
 }
+
+export const eof = new Parser((state) => {
+  if (state.isError) return state
+
+  return state.index === state.src.length
+    ? updateResult(null, state)
+    : setError(`Expect end of file, but got ${state.src.slice(state.index)}`, state)
+})
+
+export const index = new Parser((state) => {
+  if (state.isError) return state
+
+  return updateResult(state.index, state)
+})

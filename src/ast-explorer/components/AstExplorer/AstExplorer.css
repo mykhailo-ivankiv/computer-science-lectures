@@ -1,0 +1,47 @@
+.AST-explorer {
+  --padding-size: 1ch;
+
+  font-family: 'Fira Code', 'SF Mono', Consolas, Liberation Mono, Menlo, monospace;
+  height: 100vh;
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  white-space: pre-wrap;
+}
+
+.AST-explorer__input-placeholder {
+  display: contents;
+}
+
+.AST-explorer__result {
+  padding: var(--padding-size);
+  unicode-bidi: embed;
+  white-space: inherit;
+}
+
+.AST-explorer__result--json {
+  /*background: hsla(0, 52%, 96%, 0.4);*/
+}
+
+/* prettier-ignore */
+:root {
+  --turquoise :    hsl(168,  76%, 42%);
+  --green-sea:     hsl(168,  76%, 36%);
+  --emerald:       hsl(145,  63%, 49%);
+  --nephritis:     hsl(145,  63%, 42%);
+  --peter-river:   hsl(204,  70%, 53%);
+  --belize-hole:   hsl(204,  64%, 44%);
+  --amethyst:      hsl(283,  39%, 53%);
+  --wisteria:      hsl(282,  44%, 47%);
+  --wet-asphalt:   hsl(210,  29%, 29%);
+  --midnight-blue: hsl(210,  29%, 24%);
+  --sun-flower:    hsl( 48,  89%, 50%);
+  --orange:        hsl( 37,  90%, 51%);
+  --carrot:        hsl( 28,  80%, 52%);
+  --pumpkin:       hsl( 24, 100%, 41%);
+  --alizarin:      hsl(  6,  78%, 57%);
+  --pomegranate:   hsl(  6,  63%, 46%);
+  --clouds:        hsl(192,  15%, 94%);
+  --silver:        hsl(204,   8%, 76%);
+  --concrete:      hsl(184,   9%, 62%);
+  --asbestos:      hsl(184,   6%, 53%);
+}

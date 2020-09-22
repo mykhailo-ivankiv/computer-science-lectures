@@ -1,4 +1,4 @@
-import { wrapBy, str, separatedBy, choice, lazy } from './parser-combinators'
+import { wrapBy, str, separatedBy, choice, lazy } from '../parser-combinators/index.js'
 import { number } from './number.js'
 
 const wrapByBrackets = wrapBy(str('['), str(']'))

@@ -29,6 +29,8 @@ export const tail = ([_, ...tail]) => tail
  */
 export const last = (arr) => arr[arr.length - 1]
 
+export const init = (arr) => (arr.length <= 1 ? [] : arr.slice(0, arr.length - 1))
+
 /**
  * @template T
  * @param {T} a
@@ -102,3 +104,15 @@ export const unfold = (fn, el) => {
 
   return repeater(el, [])
 }
+
+export const splitAt = (n, str) => [str.slice(0, n), str.slice(n)]
+// prettier-ignore
+export const splitBy = (arr, str) => reduce ( ([accum, offset], breakPoint) => {
+  const str = last(accum)
+  const result = init(accum);
+
+  return [[...result, ...splitAt(breakPoint - offset, str)], breakPoint]
+
+} , [[str], 0], arr)[0]
+
+export const concat = (a, b) => a.concat(b)

@@ -1,4 +1,4 @@
-import { choice, str, sequenceOf, many } from './parser-combinators'
+import { choice, str, sequenceOf, many } from '../parser-combinators/index.js'
 
 const notZeroDigits = choice(
   str('1').map(() => 1),

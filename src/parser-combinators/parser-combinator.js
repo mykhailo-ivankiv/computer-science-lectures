@@ -1,5 +1,5 @@
 // @ts-check
-import { find, mapAccum, unfold, last } from '../utils.js'
+import { find, mapAccum, unfold, last } from '../utils/utils.js'
 import Parser, { setError, updateResult } from './Parser.js'
 
 // Combinations

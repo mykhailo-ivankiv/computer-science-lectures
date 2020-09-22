@@ -1,4 +1,4 @@
-import { regexp, choice, wrapBy, str } from './parser-combinators'
+import { regexp, choice, wrapBy, str } from '../parser-combinators/index.js'
 
 const stringBody = regexp(/[\w\s-.,]+/)
 export const string = choice(
